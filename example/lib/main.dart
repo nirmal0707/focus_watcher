@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:focus_watcher/focus_watcher.dart';
 
 void main() {
   runApp(const MyApp());
@@ -108,9 +109,17 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text(
               'You have pushed the button this many times:',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            FocusWatcher(
+              onFocusGained: () {
+                // count is now focused
+              },
+              onFocusLost: () {
+                // count is now unfocused
+              },
+              child: Text(
+                '$_counter',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
             ),
           ],
         ),

@@ -30,4 +30,31 @@ void main() {
     expect(onFocusGainedCalled, isTrue);
     expect(onVisibilityGainedCalled, isTrue);
   });
+
+  testWidgets(
+      'FocusWatcher triggers onFocusLost and onVisibilityLost callbacks',
+      (WidgetTester tester) async {
+    bool onFocusLostCalled = false;
+    bool onVisibilityLostCalled = false;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: FocusWatcher(
+          onFocusLost: () => onFocusLostCalled = true,
+          onVisibilityLost: () => onVisibilityLostCalled = true,
+          child: const Text('Test Widget'),
+        ),
+      ),
+    );
+
+    // Make the widget visible and pump a frame to ensure visibility
+    await tester.pumpAndSettle();
+
+    // Simulate losing focus or making the widget invisible
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pumpAndSettle();
+
+    expect(onFocusLostCalled, isTrue);
+    expect(onVisibilityLostCalled, isTrue);
+  });
 }

@@ -1,39 +1,77 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Focus Watcher
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
+Get notified every time your widget appears or disappears from the screen.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages).
--->
+Similar to `onResume()`/`onPause()` on Android and `viewDidAppear()`/`viewDidDisappear()` on iOS.
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+Focus Watcher fires callbacks for you whenever something happens to take or give your widget focus. Such an event might be, for instance, the user:
 
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+- Navigating to/from another screen;
+- Turning the device’s screen on/off while your widget is visible;
+- Switching to/from another app while your widget is visible;
+- Scrolling your widget in/out the screen;
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
-
 ```dart
-const like = 'sample';
+@override
+Widget build(BuildContext context) =>
+    FocusWatcher(
+      onFocusLost: () {
+        logger.i(
+          'Focus Lost.'
+          '\nTriggered when either [onVisibilityLost] or [onForegroundLost] '
+          'is called.'
+          '\nEquivalent to onPause() on Android or viewDidDisappear() on iOS.',
+        );
+      },
+      onFocusGained: () {
+        logger.i(
+          'Focus Gained.'
+          '\nTriggered when either [onVisibilityGained] or [onForegroundGained] '
+          'is called.'
+          '\nEquivalent to onResume() on Android or viewDidAppear() on iOS.',
+        );
+      },
+      onVisibilityLost: () {
+        logger.i(
+          'Visibility Lost.'
+          '\nIt means the widget is no longer visible within your app.',
+        );
+      },
+      onVisibilityGained: () {
+        logger.i(
+          'Visibility Gained.'
+          '\nIt means the widget is now visible within your app.',
+        );
+      },
+      onForegroundLost: () {
+        logger.i(
+          'Foreground Lost.'
+          '\nIt means, for example, that the user sent your app to the background by opening '
+          'another app or turned off the device\'s screen while your '
+          'widget was visible.',
+        );
+      },
+      onForegroundGained: () {
+        logger.i(
+          'Foreground Gained.'
+          '\nIt means, for example, that the user switched back to your app or turned the '
+          'device\'s screen back on while your widget was visible.',
+        );
+      },
+      isWidgetTest: false,
+      child: Container(),
+    );
 ```
 
-## Additional information
+## Usage Scenarios
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+- Turn on and off resource-consuming features, such as camera, location or bluetooth;
+- Sync your data with a remote API or local database;
+- Pause and resume video/audio playback or streaming;
+
+
+## Contribution
+
+Contributions of any kind are welcome. Feel free to improve the library by creating a pull request or opening an issue.
